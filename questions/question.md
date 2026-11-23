@@ -1,56 +1,80 @@
-# Sierra — SWE Mock Interview (45 min, CoderPad-style)
+# Sierra — Software Engineering Interview
 
-> A realistic, build-on-itself coding interview inspired by reported Sierra
-> SWE on-site/CoderPad experiences. You are given a small, working codebase and
-> asked to extend it across three progressive parts.
+**Duration:** 45 minutes
+**Environment:** Python · CoderPad-style codebase
 
-## The setup
+## Background
 
-You've joined a team working on Sierra's conversational agent platform. Agents
-hold long, multi-turn conversations with customers (think: a hotel-booking
-assistant). Transcripts of those conversations are stored in a service you
-access through a provided client. You'll work with that client to build up a
-small piece of the agent's memory/context machinery.
+You're working on Sierra's conversational agent platform.
 
-**This is not a LeetCode puzzle.** There is a real (small) codebase to read.
-Part of the exercise is understanding how the provided pieces fit together
-before you write anything. Budget a few minutes up front to read the code.
+Agents interact with customers across multi-turn conversations. For example, a
+hotel-booking assistant might help a customer search for hotels, compare
+options, and complete a reservation over several messages.
 
-## What's in the repo
+These conversations are stored by a separate service and can be accessed through
+an existing API client.
+
+Your task is to implement several features that help agents retrieve, manage, and
+retain conversation information.
+
+## Provided Codebase
+
+The project contains the following files:
 
 ```
-sierra/            # provided codebase — READ THIS, don't change it
-  models.py        #   Message, Page  (the data you'll handle)
-  client.py        #   ConversationClient  (your entry point)
-  _backend.py      #   simulated remote service (implementation detail)
-  sandbox.py       #   sample data + a runnable demo
-candidate.py       # YOUR WORKSPACE — implement everything here
-tests/             # executable tests for all three parts
-questions/         # these instructions
+sierra/
+    models.py      # Message, Page data models
+    client.py      # ConversationClient — your entry point
+    _backend.py    # the conversation service (implementation detail)
+    sandbox.py     # sample data + a runnable demo
+
+candidate.py       # implement your solutions here
+
+tests/
+    test_part1.py
+    test_part2.py
+    test_part3.py
+
+questions/
+    question.md
+    part1.md
+    part2.md
+    part3.md
 ```
 
-Start here:
+The existing codebase provides the conversation service, client interface, and
+data models. Implement your solutions in `candidate.py`, using the provided
+interfaces.
 
-1. Read `sierra/models.py` — the shapes you'll pass around.
-2. Read `sierra/client.py` — how you talk to the service.
-3. Run the demo to see it live: `python -m sierra.sandbox`
-4. Open `candidate.py` — the stubs you'll fill in.
+> The conversation service is **simulated locally**, but treat it like a real
+> remote API: its internals (`sierra/_backend.py`) are an implementation detail.
+> Everything you need is on the client's public surface — part of the task is
+> discovering that contract by reading the code.
 
-> The transcript service is **simulated locally**, but treat it like a real
-> remote API: its internals (`sierra/_backend.py`) are an implementation detail
-> you shouldn't reach into. Everything you need is on the client's public
-> surface, and part of the task is discovering that contract by reading it.
+**Read these first:** `sierra/models.py` (the shapes you'll handle) and
+`sierra/client.py` (how you talk to the service). You can also run the demo:
 
-## The three parts
+```bash
+python -m sierra.sandbox
+```
 
-Each part builds on the previous one. Do them in order.
+## Interview Tasks
 
-- **Part 1 — Cursor pagination** (`questions/part1.md`): assemble a complete
-  conversation transcript from the paginated service.
-- **Part 2 — Context compaction** (`questions/part2.md`): keep a bounded,
-  token-limited context window over a running conversation.
-- **Part 3 — Query retention** (`questions/part3.md`): extend Part 2 to remember
-  the most frequent user queries over time.
+The interview consists of three progressive parts. **Each part builds on the
+previous implementation.** Additional requirements and constraints are provided
+in the corresponding question file.
+
+### Part 1 — Conversation History
+Implement functionality to retrieve a complete conversation history from the
+provided service. See `questions/part1.md`.
+
+### Part 2 — Context Management
+Extend the system to manage conversation history within a configurable token
+budget. See `questions/part2.md`.
+
+### Part 3 — Query Retention
+Extend the conversation system to track frequently occurring user queries while
+maintaining a bounded collection. See `questions/part3.md`.
 
 ## Running the tests
 
@@ -60,16 +84,9 @@ pytest tests/test_part1.py -q  # one part at a time
 ```
 
 - `tests/test_client_smoke.py` tests the **provided** client and should pass
-  immediately. If it fails, your environment is wrong — fix that first.
+  immediately — if it fails, fix your environment first.
 - `tests/test_part1.py`, `test_part2.py`, `test_part3.py` test **your** code and
   are expected to **fail until you implement each part**.
-
-## How you'll be evaluated (what a real interviewer looks for)
-
-- Do you read and use the existing code instead of reinventing it?
-- Correct handling of edge cases (empty input, boundaries, off-by-one).
-- Clean, incremental progress — get Part 1 green before starting Part 2.
-- Clear communication of assumptions and trade-offs as you go.
 
 ---
 
