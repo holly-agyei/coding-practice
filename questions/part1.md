@@ -1,41 +1,38 @@
-# Part 1 — Cursor Pagination
+# Part 1 — Conversation History
 
 ## Context
 
-The transcript service never returns a whole conversation in one shot. It hands
-back **pages**. Your first task is to use the provided `ConversationClient` to
-retrieve a **complete** conversation transcript.
+Sierra's conversational agents interact with customers across multiple turns.
+These conversations are stored in a transcript service that returns messages in
+pages rather than all at once.
+
+You are provided with a `ConversationClient` that communicates with this service.
 
 ## Task
 
-Implement in `candidate.py`:
+Implement the following function in `candidate.py`:
 
 ```python
 def fetch_all_messages(client: ConversationClient, conversation_id: str) -> list[Message]:
     ...
 ```
 
-Return every message in the conversation, oldest first.
-
-## Before you start
-
-Read `sierra/client.py`. The method you'll call and the pagination contract
-(what a page contains, and how to ask for the next one) are documented there.
-Don't assume — read it. You can also poke at it live:
-
-```bash
-python -m sierra.sandbox
-```
+The function should retrieve the complete conversation history for the given
+conversation ID and return all messages in chronological order, from oldest to
+newest.
 
 ## Requirements
 
-- Return **all** messages for the conversation, in oldest-first order.
-- No duplicates and no missing messages across page boundaries.
-- Must be correct when the transcript length is an exact multiple of the page
-  size, and when it's one more or one less.
-- An **empty but existing** conversation returns an empty list.
-- An **unknown** conversation should surface the service's error (don't swallow
-  it).
+- Return every message in the conversation.
+- Preserve the original chronological order.
+- Ensure no messages are duplicated or skipped across pages.
+- Handle conversations whose lengths fall exactly on page boundaries, as well as
+  those with partially filled final pages.
+- Return an empty list for an existing conversation containing no messages.
+- Propagate the service's error when the conversation ID does not exist.
+
+You may use the existing codebase and provided client interfaces to implement the
+solution.
 
 ## Run
 
